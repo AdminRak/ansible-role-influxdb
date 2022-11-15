@@ -1,7 +1,8 @@
 ---
 - name: Ensure InfluxDB is up and running
   ansible.builtin.command: influx ping \
-    --host "{{ influxdb_host }}"
+    --host "{{ influxdb_host }}" \
+    --skip-verify 
   retries: 10
   delay: 5
   register: _ping
