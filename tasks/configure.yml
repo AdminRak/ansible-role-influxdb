@@ -72,3 +72,19 @@
     - _bucket.rc != 0
     - '"already exists" not in _bucket.stderr'
   changed_when: _bucket.rc == 0
+- name: Ensure tasks exist
+  ansible.builtin.command: influx task create \
+    --host "{{ influxdb_host }}" \
+    --name "{{ item.name }}" \
+    --org "{{ item.org }}" \
+    --skip-verify \
+    --every "{{ item.every }}" \
+    --file "{{ item.filename }}"
+  loop: "{{ influxdb_tasks }}"
+  loop_control:
+    label: "{{ item.name }}"
+  register: _task
+  failed_when:
+    - _task.rc != 0
+    - '"already exists" not in _task.stderr'
+  changed_when: _task.rc == 0
